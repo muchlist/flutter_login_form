@@ -1,27 +1,32 @@
 import 'package:flutter/material.dart';
 
-class LoginForm extends StatelessWidget {
+class LoginForm extends StatefulWidget {
+  const LoginForm();
+
+  @override
+  _LoginFormState createState() => _LoginFormState();
+}
+
+class _LoginFormState extends State<LoginForm> {
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+
   final _key = GlobalKey<FormState>();
+  static const maxLength = 20;
 
-  // String? _validateEmail(String value) {
-  //   if (value.isEmpty) {
-  //     return "Field cannot be empty";
-  //   } else {
-  //     return null;
-  //   }
-  // }
-
-  // String? _validatePassword(String value) {
-  //   if (value.length < 8) {
-  //     return "At least 8 chars!";
-  //   } else {
-  //     return null;
-  //   }
-  // }
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
 
   void _login() {
     if (_key.currentState?.validate() ?? false) {
-      debugPrint("Yay! :)");
+      final email = emailController.text;
+      final password = passwordController.text;
+
+      // final login = LoginClass(user: email, password: password);
     } else {
       debugPrint("Error :(");
     }
@@ -35,14 +40,19 @@ class LoginForm extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             TextFormField(
+              maxLength: maxLength,
               decoration: const InputDecoration(
-                  icon: Icon(Icons.email), hintText: "Email"),
+                  // counterText:
+                  //     "chars left: ${maxLength - emailController.text.length}",
+                  icon: Icon(Icons.email),
+                  hintText: "Email"),
               validator: (text) {
                 if (text == null || text.isEmpty) {
                   return 'email cant be empty';
                 }
                 return null;
               },
+              controller: emailController,
             ),
             TextFormField(
               decoration: const InputDecoration(
@@ -54,6 +64,7 @@ class LoginForm extends StatelessWidget {
                 }
                 return null;
               },
+              controller: passwordController,
             ),
             RaisedButton(child: Text("Login"), onPressed: _login),
           ],
